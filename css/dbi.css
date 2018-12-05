@@ -1,0 +1,66 @@
+#dbi_chart_container {
+	max-height: 800px;
+	/*max-width: 880px;*/
+}
+
+.dbi_content_container {
+	display: inline-block;
+    margin: 1em;	
+    width: 96%; 
+	/*max-width: 890px;*/
+	border: rgba(128,128,128,0.5) 1px dotted;
+}
+
+.dbi_float_left {
+	float: left;
+}
+
+.dbi_float_left_newline {
+	float: left;
+	clear: left;
+}
+
+.dbi_float_right {
+	float: right;
+}
+
+.dbi_float_right_newline {
+	float: right;
+	clear: right;
+}
+
+.dbi_hidden {
+	display: none;
+}
+
+.dbi_heading {
+	font-size: 2em;
+}
+
+.dbi_slider {
+    width: 100%; 
+    margin: 0;
+    height: 25px; 
+    background: #f8f8f8; 
+    outline: none; 
+    opacity: 0.7; 
+    transition: opacity .2s;
+}
+
+.dbi_slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+#dbi_slider_subtitles {
+	font-size: 0.8em;
+	margin-bottom: 2.6em;
+}
+
+.dbi_title {
+	font-size: 2em;
+}
+
+.dbi_title_minor {
+	font-size: 1.4em;
+}
+
