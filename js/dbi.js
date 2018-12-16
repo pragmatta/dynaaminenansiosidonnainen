@@ -1,8 +1,9 @@
 const DEFAULT_SALARY = 600
 const DEFAULT_BENEFIT = 560
-const BENEFIT_ACCUMULATION_INTERVAL = 12
+const BENEFIT_ACCUMULATION_INTERVAL = 11
 const BENEFIT_PAYBACK_RATE = 0.5
 const BENEFIT_PAYBACK_LIMIT = DEFAULT_BENEFIT/BENEFIT_PAYBACK_RATE
+const DEFAULT_WORK_MONTHS = 12
 const REVENUE_COLOR = { FILL: 'rgba(38, 208, 124, 0.4)', STROKE: 'rgba(38, 208, 124, 1)' }
 const BENEFIT_COLOR = { FILL: 'rgba(58, 93, 174, 0.4)', STROKE: 'rgba(58, 93, 174, 1)' }
 const PREDICTION_COLOR = { FILL: 'rgba(58, 93, 174, 0.2)', STROKE: 'rgba(58, 93, 174, 1)' }
@@ -17,9 +18,9 @@ const REVENUE_PRESETS = {
 	g: {min:1200, max:1600}, 
 	h: {min:1600, max:2000}, 
 	i: {min:2000, max:2500},
-	j: {min:2000, max:2000},
-	k: {min:2200, max:2200},
-	l: {min:2400, max:2400},
+	// j: {min:2000, max:2000},
+	// k: {min:2200, max:2200},
+	// l: {min:2400, max:2400},
 }
 
 function _sumInterval(arr, start_index, interval_length) {
@@ -105,8 +106,23 @@ function _onload() {
 	window._dbi_chart = new Chart(ctx, {
 	    type: 'line',
 	    data: {
+	        // labels: ["0e/kk", "500e/kk", "1000e/kk", "1500e/kk", "2000e/kk", "2500e/kk", "3000e/kk", "3500e/kk", "4000e/kk", "4500e/kk", "5000e/kk", "5500e/kk", "6000e/kk", "6500e/kk", "7000e/kk", "7500e/kk", "8000e/kk"],//window._dbi_months,
 	        labels: window._dbi_months,
 	        datasets: [
+	        	// TULONSIIRTONEUTRAALI
+				// { label: "Tulonsiirto perustulossa", data: [560, 390, 220, 105, 50, 5, -5, -10, -20, -50, -85, -110, -140, -165, -160, -150], borderWidth: 1, backgroundColor: BENEFIT_COLOR.FILL, borderColor: BENEFIT_COLOR.STROKE },
+
+	        	// KUSTANNUSNEUTRAALI
+				// { label: "Dynaaminen AS", data: window._dbi_benefits, borderWidth: 1, backgroundColor: BENEFIT_COLOR.FILL, borderColor: BENEFIT_COLOR.STROKE },
+				// { label: "Ansiot", yAxisID: 'line-stacked', data: window._dbi_revenues, borderWidth: 1, backgroundColor: REVENUE_COLOR.FILL, borderColor: REVENUE_COLOR.STROKE },
+				// { label: "Perinteinen AS", yAxisID: 'line-stacked', data: window._dbi_withdrawals, fill: 1, borderWidth: 1, backgroundColor: WITHDRAWAL_COLOR.FILL, borderColor: WITHDRAWAL_COLOR.STROKE },
+
+	        	// DEMO
+				// { label: "Ansiosidonnainen", data: window._dbi_benefits, borderWidth: 1, backgroundColor: BENEFIT_COLOR.FILL, borderColor: BENEFIT_COLOR.STROKE },
+				// { label: "Ansiot", yAxisID: 'line-stacked', data: window._dbi_revenues, borderWidth: 1, backgroundColor: REVENUE_COLOR.FILL, borderColor: REVENUE_COLOR.STROKE },
+				// { label: "Tuki", yAxisID: 'line-stacked', data: window._dbi_withdrawals, fill: 1, borderWidth: 1, backgroundColor: WITHDRAWAL_COLOR.FILL, borderColor: WITHDRAWAL_COLOR.STROKE },
+
+				// NORMAL
 				{ label: "Ansiosidonnainen", data: window._dbi_benefits, borderWidth: 1, backgroundColor: BENEFIT_COLOR.FILL, borderColor: BENEFIT_COLOR.STROKE },
 				{ label: "Ennuste", data: window._dbi_predictions, fill: 0, borderWidth: 1, backgroundColor: PREDICTION_COLOR.FILL, borderColor: PREDICTION_COLOR.STROKE },
 				{ label: "Ansiot", yAxisID: 'line-stacked', data: window._dbi_revenues, borderWidth: 1, backgroundColor: REVENUE_COLOR.FILL, borderColor: REVENUE_COLOR.STROKE },
@@ -143,8 +159,7 @@ function _onload() {
 	        },
 	    }
 	});
-	
-	_setElementValue("dbi_ansiokuukaudet", BENEFIT_ACCUMULATION_INTERVAL)
+	_setElementValue("dbi_ansiokuukaudet", DEFAULT_WORK_MONTHS)
 	_setElementValue("dbi_revenue_preset", "c")
 	revenuePresetUpdate()
 
@@ -161,15 +176,16 @@ function dataReset() {
 }
 
 function dataInitialize() {
-	var ansiokuukaudet = _getElementIntValue("dbi_ansiokuukaudet", BENEFIT_ACCUMULATION_INTERVAL)
+	var ansiokuukaudet = _getElementIntValue("dbi_ansiokuukaudet", DEFAULT_WORK_MONTHS)
 	var min_ansio = _getElementIntValue("dbi_minimiansio", DEFAULT_SALARY)
 	var max_ansio = _getElementIntValue("dbi_maksimiansio", DEFAULT_SALARY)
 	for (var i=0; i<=2*BENEFIT_ACCUMULATION_INTERVAL; i++) {
 		window._dbi_months[i] = _printMonth(i-BENEFIT_ACCUMULATION_INTERVAL)
-		window._dbi_withdrawals[i] = 0
-		if (i <= ansiokuukaudet) {
+		if (i < ansiokuukaudet) {
+			window._dbi_withdrawals[i] = 0
 			window._dbi_revenues[i] = _getRandomValue(min_ansio, max_ansio)
 		} else {
+			window._dbi_withdrawals[i] = 0
 			window._dbi_revenues[i] = 0
 		}
 		if (i==0) {
@@ -179,6 +195,7 @@ function dataInitialize() {
 		} else {
 			window._dbi_benefits[i] = benefitCalculateNext(window._dbi_revenues, window._dbi_benefits, i-1, window._dbi_benefits[i-1])
 		}		
+		chartUpdate()
 	}	
 	var i=2*BENEFIT_ACCUMULATION_INTERVAL+1
 	var j=window._dbi_month_max - i + 1
@@ -189,7 +206,7 @@ function dataInitialize() {
 		window._dbi_withdrawals.splice(i, j)
 		window._dbi_months.splice(i, j)
 	}
-	window._dbi_month_current = BENEFIT_ACCUMULATION_INTERVAL
+	window._dbi_month_current = DEFAULT_WORK_MONTHS
 	window._dbi_month_max = 2*BENEFIT_ACCUMULATION_INTERVAL
 }
 
@@ -200,7 +217,7 @@ function chartUpdate() {
 		max_value = Math.max(max_value, window._dbi_predictions[i] || 0)
 		max_value = Math.max(max_value, (window._dbi_revenues[i] || 0) + (window._dbi_withdrawals[i] || 0))
 	}
-	max_value = Math.floor((max_value + 100)/100)*100
+	max_value = Math.floor((max_value*1.1)/100)*100
 	window._dbi_chart.options.scales.yAxes[0].ticks.max = max_value
 	window._dbi_chart.options.scales.yAxes[1].ticks.max = max_value
 	window._dbi_chart.update()
@@ -274,7 +291,7 @@ function benefitCalculateNext(revenues, benefits, current_index, withdrawal) {
 		var unpaid_withdrawal = withdrawal*(1-BENEFIT_PAYBACK_RATE)/BENEFIT_ACCUMULATION_INTERVAL
 		return DEFAULT_BENEFIT + Math.max(0, Math.round(leftover_benefit + Math.max(0, revenue_payback - unpaid_withdrawal)))
 	} else {
-		return Math.round((benefit*(BENEFIT_ACCUMULATION_INTERVAL-1)*1.038 + revenue - withdrawal)/BENEFIT_ACCUMULATION_INTERVAL)
+		return Math.round(Math.min(revenue, (benefit*(BENEFIT_ACCUMULATION_INTERVAL-1)*1.038 + revenue - withdrawal)/BENEFIT_ACCUMULATION_INTERVAL))
 	}
 }
 
@@ -337,19 +354,32 @@ function benefitCollect() {
 	window._dbi_withdrawals[window._dbi_month_current] = benefitGetCurrentWithdrawal()
 
 	window._dbi_month_current = window._dbi_month_current + 1
-	window._dbi_month_max = window._dbi_month_max + 1
-
-
-
-	window._dbi_months[window._dbi_month_max] = _printMonth(window._dbi_month_max-BENEFIT_ACCUMULATION_INTERVAL)
-	window._dbi_revenues[window._dbi_month_max] = 0
-	window._dbi_withdrawals[window._dbi_month_max] = 0
-	window._dbi_benefits[window._dbi_month_max] = benefitCalculateNext(window._dbi_revenues, window._dbi_benefits, window._dbi_month_max-1, window._dbi_benefits[window._dbi_month_max-1])
-	window._dbi_predictions[window._dbi_month_max] = benefitCalculateNext(window._dbi_revenues, window._dbi_predictions, window._dbi_month_max-1, window._dbi_predictions[window._dbi_month_max-1])
+	if (window._dbi_month_current == window._dbi_month_max) {
+		window._dbi_month_max = window._dbi_month_max + 1
+		window._dbi_months[window._dbi_month_max] = _printMonth(window._dbi_month_max-BENEFIT_ACCUMULATION_INTERVAL)
+		window._dbi_revenues[window._dbi_month_max] = 0
+		window._dbi_withdrawals[window._dbi_month_max] = 0
+		window._dbi_benefits[window._dbi_month_max] = benefitCalculateNext(window._dbi_revenues, window._dbi_benefits, window._dbi_month_max-1, window._dbi_benefits[window._dbi_month_max-1])
+		window._dbi_predictions[window._dbi_month_max] = benefitCalculateNext(window._dbi_revenues, window._dbi_predictions, window._dbi_month_max-1, window._dbi_predictions[window._dbi_month_max-1])
+	}
 
 	revenueUpdateSliderValue()
-}
 
+	// benefitDemo()
+}
+function benefitDemo() {
+	setTimeout(
+		function() {
+			if (window._dbi_month_current == BENEFIT_ACCUMULATION_INTERVAL+1) {
+				_setElementValue("dbi_revenue_slider", 0)
+				_setElementValue("dbi_benefit_slider", 100)
+				revenueUpdateSliderValue()
+				benefitUpdateSliderValue()
+			}
+			if (window._dbi_month_current <= 2*BENEFIT_ACCUMULATION_INTERVAL)
+				benefitCollect()
+		}, 800)
+}
 function predictionsUpdate() {
 	var withdrawal = benefitGetCurrentWithdrawal()
 	window._dbi_predictions[window._dbi_month_current] = window._dbi_benefits[window._dbi_month_current]

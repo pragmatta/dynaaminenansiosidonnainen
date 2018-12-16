@@ -2038,10 +2038,10 @@ input[type="submit"] {
 }
 @media (min-width: 980px) {
   #features .row:nth-child(odd) .graphic {
-    left: 66.66666667%;
+    left: 50%;
   }
   #features .row:nth-child(odd) .text {
-    left: -41.66666667%;
+    left: -50%;
   }
 }
 #features .graphic,
@@ -2056,7 +2056,7 @@ input[type="submit"] {
 }
 @media (min-width: 980px) {
   #features .graphic img {
-    width: 360px;
+    width: 400px;
   }
 }
 @media (min-width: 768px) {
