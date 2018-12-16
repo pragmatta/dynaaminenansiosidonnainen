@@ -312,10 +312,10 @@ function benefitUpdateSliderValue() {
 		_removeElementClass("dbi_benefit_change_total_decrease", "dbi_hidden")
 	}
 
-	_setElementTextContent("dbi_benefit_slider_value", window._dbi_withdrawals[window._dbi_month_current] + "e")
-	_setElementTextContent("dbi_benefit_change_month_value", (next_delta) + "e")
-	_setElementTextContent("dbi_benefit_change_total_value", (total_delta) + "e")
-	_setElementTextContent("dbi_benefit_slider_max", benefitGetCurrentlyAvailable() + "e")
+	_setElementTextContent("dbi_benefit_slider_value", window._dbi_withdrawals[window._dbi_month_current])
+	_setElementTextContent("dbi_benefit_change_month_value", (next_delta))
+	_setElementTextContent("dbi_benefit_change_total_value", (total_delta))
+	_setElementTextContent("dbi_benefit_slider_max", benefitGetCurrentlyAvailable())
 
 	chartUpdate()
 }
@@ -403,7 +403,7 @@ function predictionsGetTotal() {
 function revenueSliderReset() {
 	var revenue = revenueGetCurrentlyAvailable()
 	_setElementValue("dbi_revenue_slider", 100)
-	_setElementTextContent("dbi_revenue_slider_max", revenue + "e")
+	_setElementTextContent("dbi_revenue_slider_max", revenue)
 	revenueUpdateSliderValue()
 }
 
@@ -411,7 +411,7 @@ function revenueSliderReset() {
 function revenueUpdateSliderValue() {
 	var revenue = Math.round(_getElementIntValue("dbi_revenue_slider", 0)*revenueGetCurrentlyAvailable()/100)
 	window._dbi_revenues[window._dbi_month_current] = revenue
-	_setElementTextContent("dbi_revenue_slider_value", revenue + "e")
+	_setElementTextContent("dbi_revenue_slider_value", revenue)
 
 	benefitUpdateSliderValue()
 }
