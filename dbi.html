@@ -11,6 +11,10 @@
 
 	<div id="dbi_options_container" class="dbi_content_container">
 		<div class="dbi_title">Ansioasetukset</div>
+		<input id="dbi_chart_title_benefit" type="hidden" value="Ansiosidonnainen">
+		<input id="dbi_chart_title_prediction" type="hidden" value="Ennuste">
+		<input id="dbi_chart_title_revenue" type="hidden" value="Ansiot">
+		<input id="dbi_chart_title_withdrawal" type="hidden" value="Tuki">
 		<select id="dbi_revenue_preset" onchange="revenuePresetUpdate()">
 			<option value="a">0e/kk</option>
 			<option value="b">100-200e/kk</option>
@@ -28,12 +32,12 @@
  -->
 		</select>
 		<div class="dbi_hidden">
-			<input id="dbi_ansiokuukaudet" class="hidden" type="text" name="ansiokuukaudet" value="" onchange="revenueSettingsUpdate()">
-			<input id="dbi_keskiansio" type="text" name="keskiansio" placeholder="Keskiansio" onchange="revenueSettingsUpdate()">
-			<input id="dbi_vaihteluvali" type="text" name="vaihteluvali" placeholder="Vaihteluväli" onchange="revenueSettingsUpdate()">
-			<input id="dbi_minimiansio" type="text" name="minimiansio" placeholder="Minimiansio" disabled>
-			<input id="dbi_maksimiansio" type="text" name="maksimiansio" placeholder="Maksimiansio" disabled>
-			<button id="dbi_arvoansiot" onclick="dataReset()">Alusta vuoden ansiot</button>
+			<input id="dbi_work_months" class="hidden" type="text" name="ansiokuukaudet" value="" onchange="revenueSettingsUpdate()">
+			<input id="dbi_revenue_average" type="text" name="keskiansio" placeholder="Keskiansio" onchange="revenueSettingsUpdate()">
+			<input id="dbi_revenue_variance" type="text" name="vaihteluvali" placeholder="Vaihteluväli" onchange="revenueSettingsUpdate()">
+			<input id="dbi_revenue_min" type="text" name="minimiansio" placeholder="Minimiansio" disabled>
+			<input id="dbi_revenue_max" type="text" name="maksimiansio" placeholder="Maksimiansio" disabled>
+			<button id="dbi_revenue_reset" onclick="dataReset()">Alusta vuoden ansiot</button>
 		</div>
 
 	</div>

@@ -123,10 +123,10 @@ function _onload() {
 				// { label: "Tuki", yAxisID: 'line-stacked', data: window._dbi_withdrawals, fill: 1, borderWidth: 1, backgroundColor: WITHDRAWAL_COLOR.FILL, borderColor: WITHDRAWAL_COLOR.STROKE },
 
 				// NORMAL
-				{ label: "Ansiosidonnainen", data: window._dbi_benefits, borderWidth: 1, backgroundColor: BENEFIT_COLOR.FILL, borderColor: BENEFIT_COLOR.STROKE },
-				{ label: "Ennuste", data: window._dbi_predictions, fill: 0, borderWidth: 1, backgroundColor: PREDICTION_COLOR.FILL, borderColor: PREDICTION_COLOR.STROKE },
-				{ label: "Ansiot", yAxisID: 'line-stacked', data: window._dbi_revenues, borderWidth: 1, backgroundColor: REVENUE_COLOR.FILL, borderColor: REVENUE_COLOR.STROKE },
-				{ label: "Tuki", yAxisID: 'line-stacked', data: window._dbi_withdrawals, fill: 2, borderWidth: 1, backgroundColor: WITHDRAWAL_COLOR.FILL, borderColor: WITHDRAWAL_COLOR.STROKE },
+				{ label: _getElementValue("dbi_chart_title_benefit"), data: window._dbi_benefits, borderWidth: 1, backgroundColor: BENEFIT_COLOR.FILL, borderColor: BENEFIT_COLOR.STROKE },
+				{ label: _getElementValue("dbi_chart_title_prediction"), data: window._dbi_predictions, fill: 0, borderWidth: 1, backgroundColor: PREDICTION_COLOR.FILL, borderColor: PREDICTION_COLOR.STROKE },
+				{ label: _getElementValue("dbi_chart_title_revenue"), yAxisID: 'line-stacked', data: window._dbi_revenues, borderWidth: 1, backgroundColor: REVENUE_COLOR.FILL, borderColor: REVENUE_COLOR.STROKE },
+				{ label: _getElementValue("dbi_chart_title_withdrawal"), yAxisID: 'line-stacked', data: window._dbi_withdrawals, fill: 2, borderWidth: 1, backgroundColor: WITHDRAWAL_COLOR.FILL, borderColor: WITHDRAWAL_COLOR.STROKE },
 	        ]
 	    },
 	    options: {
@@ -159,7 +159,7 @@ function _onload() {
 	        },
 	    }
 	});
-	_setElementValue("dbi_ansiokuukaudet", DEFAULT_WORK_MONTHS)
+	_setElementValue("dbi_work_months", DEFAULT_WORK_MONTHS)
 	_setElementValue("dbi_revenue_preset", "c")
 	revenuePresetUpdate()
 
@@ -176,9 +176,9 @@ function dataReset() {
 }
 
 function dataInitialize() {
-	var ansiokuukaudet = _getElementIntValue("dbi_ansiokuukaudet", DEFAULT_WORK_MONTHS)
-	var min_ansio = _getElementIntValue("dbi_minimiansio", DEFAULT_SALARY)
-	var max_ansio = _getElementIntValue("dbi_maksimiansio", DEFAULT_SALARY)
+	var ansiokuukaudet = _getElementIntValue("dbi_work_months", DEFAULT_WORK_MONTHS)
+	var min_ansio = _getElementIntValue("dbi_revenue_min", DEFAULT_SALARY)
+	var max_ansio = _getElementIntValue("dbi_revenue_max", DEFAULT_SALARY)
 	for (var i=0; i<=2*BENEFIT_ACCUMULATION_INTERVAL; i++) {
 		window._dbi_months[i] = _printMonth(i-BENEFIT_ACCUMULATION_INTERVAL)
 		if (i < ansiokuukaudet) {
@@ -227,20 +227,20 @@ function chartUpdate() {
 function revenuePresetUpdate() {
 	var selection = _getElementValue("dbi_revenue_preset", "a")
 	var preset = REVENUE_PRESETS[selection]
-	_setElementValue("dbi_minimiansio", preset.min)
-	_setElementValue("dbi_maksimiansio", preset.max)
-	_setElementValue("dbi_keskiansio", (preset.min + preset.max)/2)
-	_setElementValue("dbi_vaihteluvali", (preset.max - preset.min))
+	_setElementValue("dbi_revenue_min", preset.min)
+	_setElementValue("dbi_revenue_max", preset.max)
+	_setElementValue("dbi_revenue_average", (preset.min + preset.max)/2)
+	_setElementValue("dbi_revenue_variance", (preset.max - preset.min))
 	dataReset()
 }
 
 function revenueSettingsUpdate() {
-	var keskiarvio = _getElementIntValue("dbi_keskiansio", DEFAULT_SALARY)
-	var vaihteluvali = _getElementIntValue("dbi_vaihteluvali", 0)
-	_setElementValue("dbi_keskiansio", keskiarvio)
-	_setElementValue("dbi_vaihteluvali", vaihteluvali)
-	_setElementValue("dbi_minimiansio", Math.max(keskiarvio - vaihteluvali, 0))
-	_setElementValue("dbi_maksimiansio", keskiarvio + vaihteluvali)
+	var keskiarvio = _getElementIntValue("dbi_revenue_average", DEFAULT_SALARY)
+	var vaihteluvali = _getElementIntValue("dbi_revenue_variance", 0)
+	_setElementValue("dbi_revenue_average", keskiarvio)
+	_setElementValue("dbi_revenue_variance", vaihteluvali)
+	_setElementValue("dbi_revenue_min", Math.max(keskiarvio - vaihteluvali, 0))
+	_setElementValue("dbi_revenue_max", keskiarvio + vaihteluvali)
 }
 
 function benefitSliderReset() {
@@ -417,7 +417,7 @@ function revenueUpdateSliderValue() {
 }
 
 function revenueGetCurrentlyAvailable() {
-	return _getElementIntValue("dbi_maksimiansio")
+	return _getElementIntValue("dbi_revenue_max")
 }
 
 function revenueGetCurrent() {
