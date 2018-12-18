@@ -1,3 +1,7 @@
+body {
+    font-family: 'Neutzeit Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;	
+}
+
 #dbi_chart_container {
 	max-height: 800px;
 	/*max-width: 880px;*/
