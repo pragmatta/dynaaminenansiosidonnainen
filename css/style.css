@@ -2030,6 +2030,12 @@ input[type="submit"] {
   height: 100%;
   pointer-events: none;
 }
+.flag {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
 #features .row {
   margin-bottom: 2rem;
 }
