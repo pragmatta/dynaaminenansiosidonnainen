@@ -2052,7 +2052,7 @@ input[type="submit"] {
   margin-bottom: 1.5rem;
 }
 #features .graphic img {
-  width: 110px;
+  padding-top: 1rem;
 }
 @media (min-width: 980px) {
   #features .graphic img {
