@@ -2035,6 +2035,9 @@ input[type="submit"] {
     max-width: 100%;
     height: auto;
     border-radius: 4px;
+    border-color: rgba(128, 128, 128, 0.2);
+    border-width: 1px;
+    border-style: solid;
 }
 #features .row {
   margin-bottom: 2rem;
