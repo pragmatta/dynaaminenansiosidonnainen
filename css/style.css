@@ -1908,26 +1908,6 @@ input[type="submit"] {
   z-index: 103;
 }
 @media (max-width: 767px) {
-  .nav {
-    background: #3a5dae;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 101;
-  }
-  .nav .menu {
-    padding-top: 6rem;
-    padding-bottom: 2rem;
-  }
-  .nav .menu li {
-    display: block;
-    text-align: left;
-    margin: 0;
-    padding: 0.5rem 24px;
-  }
-}
-@media (max-width: 767px) {
   .nav-footer {
     float: none;
   }
